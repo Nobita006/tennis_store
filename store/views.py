@@ -27,7 +27,7 @@ def product_list(request):
     if query:
         products = products.filter(name__icontains=query)
 
-    paginator = Paginator(products, 10)  # Show 10 products per page.
+    paginator = Paginator(products, 9) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
