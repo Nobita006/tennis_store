@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Tennis Store!</h1>
+    <p class="lead">Explore our wide range of tennis equipment and accessories.</p>
+    <hr class="my-4">
+    <p>Sign up now to start shopping!</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Sign Up</a>
+</div>
+{% endblock %}
