@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load multiply %}  <!-- Ensure this matches the name of your file, not the filter -->
+
+{% block content %}
+<h2>Shopping Cart</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in cart.items.all %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.product.price }}</td>
+            <td>{{ item.product.price|multiply:item.quantity }}</td>
+            <td>
+                <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Remove</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'empty_cart' %}" class="btn btn-warning">Empty Cart</a>
+<a href="{% url 'finalize_order' %}" class="btn btn-success">Finalize Order</a>
+{% endblock %}

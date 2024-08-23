@@ -9,4 +9,10 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('products/', views.product_list, name='products'),
     path('cart/', views.view_cart, name='cart'),
+    path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/remove/<int:cart_item_id>/', views.remove_from_cart, name='remove_from_cart'),
+    path('cart/empty/', views.empty_cart, name='empty_cart'),
+    path('order/finalize/', views.finalize_order, name='finalize_order'),
+    path('order/<int:order_id>/', views.view_order, name='view_order'),
+    path('order/<int:order_id>/cancel/', views.cancel_order, name='cancel_order'),
 ]

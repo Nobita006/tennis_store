@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.core.paginator import Paginator
-from .models import Product, Cart
+from .models import Product, Cart, CartItem, Order, OrderItem
 
 def home(request):
     return render(request, 'home.html')
@@ -32,9 +32,45 @@ def product_list(request):
     return render(request, 'products.html', {'page_obj': page_obj, 'query': query})
 
 def view_cart(request):
-    cart = Cart.objects.get(user=request.user)
+    cart, created = Cart.objects.get_or_create(user=request.user)
     return render(request, 'cart.html', {'cart': cart})
 
 def custom_logout(request):
     logout(request)
     return redirect('login')
+
+def add_to_cart(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
+    cart_item.quantity += 1
+    cart_item.save()
+    return redirect('view_cart')
+
+def remove_from_cart(request, cart_item_id):
+    cart_item = get_object_or_404(CartItem, id=cart_item_id)
+    cart_item.delete()
+    return redirect('view_cart')
+
+def empty_cart(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart.items.all().delete()
+    return redirect('view_cart')
+
+def finalize_order(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    order = Order.objects.create(user=request.user, total_amount=sum(item.product.price * item.quantity for item in cart.items.all()))
+    for item in cart.items.all():
+        OrderItem.objects.create(order=order, product=item.product, quantity=item.quantity)
+    cart.items.all().delete()
+    return redirect('view_order', order_id=order.id)
+
+def view_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    return render(request, 'order.html', {'order': order})
+
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    order.status = 'Cancelled'
+    order.save()
+    return redirect('view_order', order_id=order.id)

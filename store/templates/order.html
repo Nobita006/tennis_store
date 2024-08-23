@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Order #{{ order.id }}</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.orderitem_set.all %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.product.price }}</td>
+            <td>{{ item.product.price|multiply:item.quantity }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p>Total Amount: ${{ order.total_amount }}</p>
+{% if order.status == 'Pending' %}
+<a href="{% url 'cancel_order' order.id %}" class="btn btn-danger">Cancel Order</a>
+{% endif %}
+{% endblock %}
