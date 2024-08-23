@@ -17,7 +17,9 @@
         {% for item in cart.items.all %}
         <tr>
             <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }}</td>
+            <td>
+                <input type="number" class="form-control quantity-input" data-cart-item-id="{{ item.id }}" value="{{ item.quantity }}" min="1">
+            </td>            
             <td>{{ item.product.price }}</td>
             <td>{{ item.product.price|multiply:item.quantity }}</td>
             <td>
@@ -27,6 +29,36 @@
         {% endfor %}
     </tbody>
 </table>
+<h4>Total Amount: ${{ total_amount }}</h4>
 <a href="{% url 'empty_cart' %}" class="btn btn-warning">Empty Cart</a>
 <a href="{% url 'finalize_order' %}" class="btn btn-success">Finalize Order</a>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                const cartItemId = this.getAttribute('data-cart-item-id');
+                const newQuantity = this.value;
+
+                fetch(`/cart/update/${cartItemId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                    body: JSON.stringify({ quantity: newQuantity })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        window.location.reload();
+                    }
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}

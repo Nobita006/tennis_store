@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 from .models import Product, Cart, CartItem, Order, OrderItem
-
+import json
 def home(request):
     return render(request, 'home.html')
 
@@ -43,8 +44,15 @@ def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-    cart_item.quantity += 1
+    if not created:  # Only increase quantity if the item already exists in the cart
+        cart_item.quantity += 1
+    else:
+        cart_item.quantity = 1
     cart_item.save()
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({'status': 'success'})
+    
     return redirect('view_cart')
 
 def remove_from_cart(request, cart_item_id):
@@ -74,3 +82,17 @@ def cancel_order(request, order_id):
     order.status = 'Cancelled'
     order.save()
     return redirect('view_order', order_id=order.id)
+
+def view_cart(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    total_amount = sum(item.product.price * item.quantity for item in cart.items.all())
+    return render(request, 'cart.html', {'cart': cart, 'total_amount': total_amount})
+
+def update_cart_item(request, cart_item_id):
+    if request.method == 'POST':
+        cart_item = get_object_or_404(CartItem, id=cart_item_id, cart__user=request.user)
+        data = json.loads(request.body)
+        cart_item.quantity = int(data.get('quantity', 1))
+        cart_item.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)

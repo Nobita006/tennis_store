@@ -16,7 +16,7 @@
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">{{ product.description }}</p>
                     <p class="card-text"><strong>${{ product.price }}</strong></p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
+                    <button class="btn btn-primary add-to-cart" data-product-id="{{ product.id }}">Add to Cart</button>
                 </div>
             </div>
         </div>
@@ -52,4 +52,58 @@
         </ul>
     </nav>
 </div>
+
+<!-- Modal for confirmation -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cartModalLabel">Product Added</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        The product has been added to your cart.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+        <a href="{% url 'view_cart' %}" class="btn btn-primary">View Cart</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const buttons = document.querySelectorAll('.add-to-cart');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function() {
+                const productId = this.getAttribute('data-product-id');
+
+                fetch(`/cart/add/${productId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                })
+                .then(response => {
+                    if (response.ok) {
+                        response.json().then(data => {
+                            if (data.status === 'success') {
+                                alert('Product added to cart!');
+                            } else {
+                                alert('Failed to add product to cart.');
+                            }
+                        });
+                    } else {
+                        alert('Network response was not ok.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}
