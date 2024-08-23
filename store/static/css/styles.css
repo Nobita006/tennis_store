@@ -17,8 +17,38 @@ body {
     border-radius: 20px;
 }
 
+/* Jumbotron styling for home page */
 .jumbotron {
-    background-color: #e9ecef;
+    background-image: url("{% static 'images/jumbotron-bg.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+/* Additional styling for text */
+.jumbotron h1 {
+    font-weight: bold;
+    color: #343a40;
+}
+
+.jumbotron p.lead {
+    font-size: 1.25rem;
+}
+
+.jumbotron hr {
+    border-top: 2px solid #ffc107;
+}
+
+/* Button hover effect */
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Image below signup button */
+.img-fluid {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Sticky Footer */
@@ -34,4 +64,27 @@ body {
 
 footer {
     margin-top: auto;
+}
+
+/* Navbar link styling */
+.navbar-nav .nav-link {
+    padding-left: 15px;
+    padding-right: 15px;
+    color: #f8f9fa; /* Light grey text color */
+    font-weight: 500;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Navbar link hover effect */
+.navbar-nav .nav-link:hover {
+    color: #ffc107; /* Amber hover color */
+    background-color: #343a40; /* Slightly darker background on hover */
+    border-radius: 5px;
+}
+
+/* Active link styling */
+.navbar-nav .nav-link.active {
+    color: #fff; /* White text for active link */
+    background-color: #495057; /* Darker grey background */
+    border-radius: 5px;
 }

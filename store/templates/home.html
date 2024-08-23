@@ -1,11 +1,16 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <div class="jumbotron text-center bg-light p-5 rounded shadow mt-5">
     <h1 class="display-4">Welcome to Tennis Store!</h1>
     <p class="lead">Explore our wide range of tennis equipment and accessories.</p>
     <hr class="my-4">
     <p>Sign up now to start shopping!</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'signup' %}" role="button">Sign Up</a>
+    <a class="btn btn-primary btn-lg mb-4" href="{% url 'signup' %}" role="button">Sign Up</a>
+    
+    <!-- Add an image below the Sign Up button -->
+    <div class="mt-4">
+        <img src="{% static 'images/tennis_store_welcome.jpg' %}" class="img-fluid rounded shadow-lg" alt="Tennis Equipment" style="max-width: 100%; height: auto;">
+    </div>
 </div>
 {% endblock %}

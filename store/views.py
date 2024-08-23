@@ -108,3 +108,23 @@ def pay_order(request, order_id):
     order.save()
 
     return redirect('view_order', order_id=order.id)
+
+def cancel_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+
+    if order.status == 'Pending':
+        # Get or create the user's cart
+        cart, created = Cart.objects.get_or_create(user=request.user)
+
+        # Loop through the order items and add them back to the cart
+        for order_item in order.orderitem_set.all():
+            cart_item, created = CartItem.objects.get_or_create(cart=cart, product=order_item.product)
+            
+            # Directly set the quantity in the cart
+            cart_item.quantity = order_item.quantity if created else cart_item.quantity + order_item.quantity
+            cart_item.save()
+
+        order.delete()  # Delete the order
+        return redirect('view_cart')  # Redirect to cart page
+
+    return redirect('view_order', order_id=order.id)

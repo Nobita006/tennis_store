@@ -23,11 +23,12 @@
         {% endfor %}
     </tbody>
 </table>
-<p>Total Amount: ${{ order.total_amount }}</p>
+<h4>Total Amount: ${{ order.total_amount }}</h4>
+
 {% if order.status == 'Pending' %}
 <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger">Cancel Order</a>
 <a href="{% url 'pay_order' order.id %}" class="btn btn-success">Pay Now</a>
-{% else %}
+{% elif order.status == 'Paid' %}
 <p class="text-success">Order Paid</p>
 {% endif %}
 {% endblock %}
