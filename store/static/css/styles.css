@@ -1,25 +1,37 @@
+/* styles.css */
+
 body {
+    font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
 }
 
-.navbar-brand {
-    font-weight: bold;
+.navbar {
+    margin-bottom: 20px;
+}
+
+.card {
+    border-radius: 8px;
+}
+
+.btn-primary, .btn-success {
+    border-radius: 20px;
 }
 
 .jumbotron {
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 2rem;
+    background-color: #e9ecef;
 }
 
-.btn-primary {
-    background-color: #007bff;
-    border-color: #007bff;
+/* Sticky Footer */
+html {
+    height: 100%;
 }
 
-.btn-primary:hover {
-    background-color: #0056b3;
-    border-color: #0056b3;
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer {
+    margin-top: auto;
 }

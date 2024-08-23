@@ -96,3 +96,15 @@ def update_cart_item(request, cart_item_id):
         cart_item.save()
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error'}, status=400)
+
+def pay_order(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    
+    # Simulate payment process
+    # You could integrate with a real payment gateway here
+
+    # After successful payment
+    order.status = 'Paid'
+    order.save()
+
+    return redirect('view_order', order_id=order.id)

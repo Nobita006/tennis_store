@@ -26,5 +26,8 @@
 <p>Total Amount: ${{ order.total_amount }}</p>
 {% if order.status == 'Pending' %}
 <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger">Cancel Order</a>
+<a href="{% url 'pay_order' order.id %}" class="btn btn-success">Pay Now</a>
+{% else %}
+<p class="text-success">Order Paid</p>
 {% endif %}
 {% endblock %}
