@@ -23,7 +23,7 @@
         {% endfor %}
     </tbody>
 </table>
-<h4>Total Amount: ${{ order.total_amount }}</h4>
+<h4>Total Amount: €{{ order.total_amount }}</h4>
 
 {% if order.status == 'Pending' %}
 <a href="{% url 'cancel_order' order.id %}" class="btn btn-danger">Cancel Order</a>
