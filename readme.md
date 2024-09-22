@@ -7,6 +7,15 @@
 
 The Tennis Store is an E-Commerce website developed using the Django Framework. The website allows customers to sign up, browse products in various categories (such as rackets, clothing, and tennis bags), and manage their shopping experience through features like search, pagination, and a shopping cart. Additionally, the website supports different user types, such as managers and customers, each with specific functionalities.
 
+## **Screen Recording**
+
+
+
+https://github.com/user-attachments/assets/4b6510b7-6fb3-4d07-9cdb-767ead53d15b
+
+
+
+
 ### **Features Implemented:**
 
 1. **User Authentication:**
